@@ -28,8 +28,11 @@ dotenv.config();
 
 app.use(express.json());
 app.use(cors({
-  origin: 'http://localhost:5173', 
+  origin: process.env.NODE_ENV === 'production' 
+    ? ['https://your-frontend-domain.onrender.com', 'http://localhost:5173']
+    : 'http://localhost:5173',
   methods: ['GET', 'POST', 'PUT', 'DELETE'],
+  credentials: true
 }));
 app.use(morgan("combined", { stream: logStream }));
 
@@ -44,6 +47,14 @@ app.use('/api/appointments', appointmentRoutes);
 
 app.get("/", (req, res) => {
   res.send("Student-Teacher Booking Backend is Running!");
+});
+
+app.get("/health", (req, res) => {
+  res.status(200).json({ 
+    status: "OK", 
+    message: "Backend is running",
+    timestamp: new Date().toISOString()
+  });
 });
 
 export default app; 

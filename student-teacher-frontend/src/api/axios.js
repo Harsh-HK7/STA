@@ -2,7 +2,9 @@ import axios from 'axios';
 import { isTokenExpired } from '../utils/checkTokenValidity';
 
 const API = axios.create({
-  baseURL: 'http://localhost:4000/api',
+  baseURL: process.env.NODE_ENV === 'production' 
+    ? 'https://your-app-name.onrender.com/api'
+    : 'http://localhost:4000/api',
   headers: {
     'Content-Type': 'application/json',
   },
